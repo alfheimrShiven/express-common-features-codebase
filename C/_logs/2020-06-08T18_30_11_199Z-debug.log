@@ -1,0 +1,36 @@
+0 info it worked if it ends with ok
+1 verbose cli [
+1 verbose cli   'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '@types/slugify',
+1 verbose cli   '--save'
+1 verbose cli ]
+2 info using npm@6.14.4
+3 info using node@v12.16.2
+4 verbose npm-session f2d540217d2da603
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 http fetch GET 404 https://registry.npmjs.org/@types%2fslugify 1328ms
+8 http fetch GET 404 https://registry.npmjs.org/@types%2fslugify 1126ms
+9 silly fetchPackageMetaData error for @types/slugify@latest 404 Not Found - GET https://registry.npmjs.org/@types%2fslugify - Not found
+10 timing stage:rollbackFailedOptional Completed in 0ms
+11 timing stage:runTopLevelLifecycles Completed in 2628ms
+12 verbose stack Error: 404 Not Found - GET https://registry.npmjs.org/@types%2fslugify - Not found
+12 verbose stack     at C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-fetch\check-response.js:104:15
+12 verbose stack     at processTicksAndRejections (internal/process/task_queues.js:97:5)
+13 verbose statusCode 404
+14 verbose pkgid @types/slugify@latest
+15 verbose cwd o:\ALF Projects\DevCamper_API
+16 verbose Windows_NT 10.0.18362
+17 verbose argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "@types/slugify" "--save"
+18 verbose node v12.16.2
+19 verbose npm  v6.14.4
+20 error code E404
+21 error 404 Not Found - GET https://registry.npmjs.org/@types%2fslugify - Not found
+22 error 404
+23 error 404 '@types/slugify@latest' is not in the npm registry.
+24 error 404 You should bug the author to publish it (or use the name yourself!)
+25 error 404 Note that you can also install from a
+26 error 404 tarball, folder, http url, or git url.
+27 verbose exit [ 1, true ]
