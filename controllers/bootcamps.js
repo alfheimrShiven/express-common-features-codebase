@@ -14,7 +14,7 @@ exports.getBootcamps = asyncHandler(async(req, res, next) => {
     console.log(req.query);
 
     // removing "select" from req.query. "Select" is used to mention the fields we want to receive back while retrieving docs. It should not be used an a key to match docs
-    const removeFields = ['select', 'sort'];
+    const removeFields = ['select', 'sort', 'page', 'limit'];
     removeFields.forEach((param) => delete reqQuery[param]);
     console.log(reqQuery);
 
@@ -37,10 +37,37 @@ exports.getBootcamps = asyncHandler(async(req, res, next) => {
     // framing the query to just get the mentioned 'sort' fields
     if (req.query.sort) {
         const sort_fields = req.query.sort.split(',').join(' ');
-        query = query.sort(sort_fields); // mongoose function .sort(keys/fields)
+        query = query.sort(sort_fields); // mongoose function .sort (keys/fields)
     } else {
         query = query.sort('-createdAt');
     }
+
+    //Pagination
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 25;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const total = await Bootcamp.countDocuments();
+
+    const pagination = {};
+
+    if (endIndex < total) {
+        console.log('NEXT is there');
+        pagination.next = {
+            page: page + 1,
+            limit,
+        };
+    }
+
+    if (startIndex > 0) {
+        console.log('PREV is there');
+        pagination.prev = {
+            page: page - 1,
+            limit,
+        };
+    }
+
+    query = query.skip(startIndex).limit(limit);
 
     const bootcamps = await query;
     if (!bootcamps) {
@@ -53,6 +80,7 @@ exports.getBootcamps = asyncHandler(async(req, res, next) => {
         success: true,
         count: bootcamps.length,
         data: bootcamps,
+        pagination,
     });
 });
 
