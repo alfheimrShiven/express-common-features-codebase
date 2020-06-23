@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 const geocoder = require('../utils/geocoder');
+const Course = require('./Course');
 // const geocoder = require('../utils/geocoder');
 
 const BootcampSchema = new mongoose.Schema({
@@ -132,6 +133,21 @@ BootcampSchema.pre('save', async function(next) {
     // Not saving addresses
     this.address = undefined;
     next(); // being this a Mongoose Middleware
+});
+
+// Cascade delete courses belonging to a bootcamp that's being removed
+BootcampSchema.pre('remove', async function(next) {
+    console.log('Courses being removed from bootcamp ' + this._id);
+    await Course.deleteMany({ bootcamp: this._id });
+    next();
+});
+
+// Reverse Populate with virtuals
+BootcampSchema.virtual('courses', {
+    ref: 'Course',
+    localField: '_id',
+    foreignField: 'bootcamp',
+    justOne: false,
 });
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);
