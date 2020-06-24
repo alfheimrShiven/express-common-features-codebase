@@ -119,7 +119,7 @@ exports.createBootcamp = asyncHandler(async(req, res, next) => {
 });
 
 // @desc      Update bootcamps
-// @route     POST /api/v1/bootcamps
+// @route     PUT /api/v1/bootcamps
 // @access    Public
 exports.updateBootcamp = asyncHandler(async(req, res, next) => {
     const updated_bootcamp = await Bootcamp.findByIdAndUpdate(
