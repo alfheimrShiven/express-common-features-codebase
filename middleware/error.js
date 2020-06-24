@@ -1,3 +1,4 @@
+// Middleware to send across more specific and clear msgs to the client to assist better debugging
 const ErrorResponse = require('../utils/errorResponse');
 const colors = require('colors');
 
