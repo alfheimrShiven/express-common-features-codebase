@@ -1,3 +1,4 @@
+const path = require('path');
 const mongoose = require('mongoose');
 const geocoder = require('../utils/geocoder');
 const Bootcamp = require('../models/Bootcamp');
@@ -188,5 +189,60 @@ exports.getBootcampsInRadius = asyncHandler(async(req, res, next) => {
         success: true,
         count: bootcamps.length,
         data: bootcamps,
+    });
+});
+
+// @desc      Upload photo for bootcamps
+// @route     PUT /api/v1/bootcamps/:id/photo
+// @access    Private
+exports.bootcampPhotoUpload = asyncHandler(async(req, res, next) => {
+    const bootcamp = await Bootcamp.findById(req.params.id);
+
+    if (!bootcamp) {
+        return next(
+            new ErrorResponse('Bootcamp not found with id: ' + req.params.id, 404)
+        );
+    }
+
+    if (!req.files) {
+        return next(new ErrorResponse('Please upload the file', 400));
+    }
+
+    const file = req.files.file;
+
+    // make sure file is a photo
+    if (!file.mimetype.startsWith('image')) {
+        return next(new ErrorResponse('Please upload an image file', 400));
+    }
+
+    // Check file size
+    if (file.size > process.env.MAX_FILE_UPLOAD) {
+        return next(
+            new ErrorResponse(
+                'Please upload an image less than ' + process.env.MAX_FILE_UPLOAD,
+                400
+            )
+        );
+    }
+
+    // creating a custom file name to prevent overriding incase of same name
+    file.name = 'photo_' + bootcamp._id + path.parse(file.name).ext; // using path module to add extention to the modified filename
+
+    // mv function is present in the file object check console.log(file) is used to move files
+    file.mv(process.env.FILE_UPLOAD_PATH + '/' + file.name, async(err) => {
+        if (err) {
+            console.error(err);
+            return next(new ErrorResponse('Problem with file upload', 500));
+        }
+
+        // finally updating the db
+        await Bootcamp.findByIdAndUpdate(req.params.id, {
+            photo: file.name,
+        });
+
+        res.status(200).json({
+            success: true,
+            data: file.name,
+        });
     });
 });
