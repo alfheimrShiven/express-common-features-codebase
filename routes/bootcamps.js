@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+
+//mounting the controllers of bootcamp
 const {
     getBootcamps,
     getBootcamp,
