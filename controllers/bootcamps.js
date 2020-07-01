@@ -65,46 +65,62 @@ exports.createBootcamp = asyncHandler(async(req, res, next) => {
 
 // @desc      Update bootcamps
 // @route     PUT /api/v1/bootcamps
-// @access    Public
+// @access    Protected
 exports.updateBootcamp = asyncHandler(async(req, res, next) => {
-    const updated_bootcamp = await Bootcamp.findByIdAndUpdate(
-        req.params.id,
-        req.body, {
-            runValidators: true,
-            new: true,
-        }
-    );
-
-    if (!updated_bootcamp) {
-        res.status(400).json({
-            success: false,
-            data: null,
-        });
-    } else {
-        res.status(200).json({
-            success: true,
-            data: updated_bootcamp,
-        });
+    //Checking if the bootcamp belongs to the loggedin user
+    let bootcamp = await Bootcamp.findById(req.params.id);
+    if (!bootcamp) {
+        return next(
+            new ErrorResponse('Bootcamp with id ' + req.params.id + ' not found', 404)
+        );
     }
+
+    if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        return next(
+            new ErrorResponse(
+                'User ' + req.user.id + ' is not authorized to update this bootcamp'
+            )
+        );
+    }
+
+    bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+        runValidators: true,
+        new: true,
+    });
+
+    res.status(200).json({
+        success: true,
+        data: bootcamp,
+    });
 });
 
 // @desc      Delete bootcamps
 // @route     POST /api/v1/bootcamps
-// @access    Public
+// @access    Private
 exports.deleteBootcamp = asyncHandler(async(req, res, next) => {
-    const bootcamp = await Bootcamp.findById(req.params.id);
+    let bootcamp = await Bootcamp.findById(req.params.id);
+    //Checking if the bootcamp belongs to the loggedin user
+
+    if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        return next(
+            new ErrorResponse(
+                'User ' + req.user.id + ' is not authorized to delete this bootcamp'
+            )
+        );
+    }
 
     if (!bootcamp) {
-        res.status(400).json({
-            success: false,
-        });
-    } else {
-        bootcamp.remove();
-        res.status(200).json({
-            success: true,
-            data: null,
-        });
+        return next(
+            new ErrorResponse('Bootcamp with id ' + req.params.id + ' not found', 404)
+        );
     }
+
+    bootcamp.remove();
+
+    res.status(200).json({
+        success: true,
+        data: null,
+    });
 });
 
 // @desc      Get bootcamps within a radius
@@ -148,6 +164,14 @@ exports.bootcampPhotoUpload = asyncHandler(async(req, res, next) => {
         );
     }
 
+    // Checking if the bootcamp is owned by the logged in user
+    if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        return next(
+            new ErrorResponse(
+                'User ' + req.user.id + ' is not authorized to delete this bootcamp'
+            )
+        );
+    }
     if (!req.files) {
         return next(new ErrorResponse('Please upload the file', 400));
     }
