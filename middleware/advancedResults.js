@@ -1,3 +1,5 @@
+// MIDDLEWARE DESCRIPTION: Used for all sorts of FIND queries with operators and operations like SELECT, SORT, PAGINATION, LIMIT
+
 const advancedResults = (model, populate) => async(req, res, next) => {
     let query;
     let reqQuery = {...req.query };
@@ -8,8 +10,10 @@ const advancedResults = (model, populate) => async(req, res, next) => {
     removeFields.forEach((param) => delete reqQuery[param]);
     console.log(reqQuery);
 
-    // entertaining query operators
+    // creating a copy of the query
     let queryStr = JSON.stringify(reqQuery);
+
+    // entertaining query operators
     // adding a dollar sign (acc. to the MongoDB query format)
     var dollar_queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, (match) => {
         return '$' + match;
@@ -18,12 +22,14 @@ const advancedResults = (model, populate) => async(req, res, next) => {
     // framing the query
     query = model.find(JSON.parse(dollar_queryStr));
 
+    //SELECT OPERATION
     // framing the query to just get the mentioned 'select' fields
     if (req.query.select) {
         const select_fields = req.query.select.split(',').join(' ');
         query = query.select(select_fields); // mongoose function .select(keys/fields)
     }
 
+    // SORT OPERATION
     // framing the query to just get the mentioned 'sort' fields
     if (req.query.sort) {
         const sort_fields = req.query.sort.split(',').join(' ');
@@ -32,7 +38,7 @@ const advancedResults = (model, populate) => async(req, res, next) => {
         query = query.sort('-createdAt');
     }
 
-    //Pagination
+    //PAGINATION
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 25;
     const startIndex = (page - 1) * limit;
