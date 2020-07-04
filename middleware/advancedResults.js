@@ -1,6 +1,9 @@
 // MIDDLEWARE DESCRIPTION: Used for all sorts of FIND queries with operators and operations like SELECT, SORT, PAGINATION, LIMIT
 
 const advancedResults = (model, populate) => async(req, res, next) => {
+    console.log(
+        'Inside advanceResults routes which offers sorting, selecting, pagination and limiting the query results'
+    );
     let query;
     let reqQuery = {...req.query };
     console.log(req.query);

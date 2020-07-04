@@ -12,7 +12,7 @@ const errorHandler = (err, req, res, next) => {
     // creating statusCode based on the err name
     if (err.name === 'CastError') {
         const message =
-            'Bootcamp not found with id of because of the ID being unformarted:' +
+            'Resource not found with id of because of the ID being unformarted:' +
             err.value;
         error = new ErrorResponse(message, 404);
     }
