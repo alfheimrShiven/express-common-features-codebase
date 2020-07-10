@@ -56,8 +56,8 @@ node seeder -d
 node seeder -i
 ```
 
-### Documentation
-Find the extensive API documentation here: https://documenter.getpostman.com/view/4736430/T17M7RDn :book:
+### Documentation :book:
+Find the extensive API documentation here: https://documenter.getpostman.com/view/4736430/T17M7RDn 
 
 ### Author :surfer:
 Version: 1.0.0
