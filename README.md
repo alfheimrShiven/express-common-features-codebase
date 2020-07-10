@@ -1,7 +1,7 @@
-# Node.js/Express.js plug&play modules!
+# Node.js/Express.js plug&play modules! :floppy_disk:
 ##### Node.js/Express.js common usecase modules which can be plugged into any Node.js project you're working on. 
 
-### Modules included:
+### Modules included: :pushpin:
 1. Initializing the Express Server (Boilerplate to get an express app up and running)
 2. DB connection and basic CRUD operations using mongoose 
 3. Middleware adding features like: Pagination, Sorting, Searching, Selecting
@@ -24,30 +24,42 @@
 20. Logout & Cookie clearence 
 
 ### Usage
-Rename "config/config.env.env" to "config/config.env" and update the values/settings to your own.
+Rename `"config/config.env.env"` to `"config/config.env"` and update the values/settings to your own.
 
 ### Install Dependencies
+
+```
 npm install
+```
 
 ### Run App
-# Run in dev mode
-npm run dev
+##### Run in dev mode
 
-# Run in prod mode
+```
+npm run dev
+```
+
+##### Run in prod mode
+```
 npm start
+```
 
 ### Database Seeder
 To seed the database with users, bootcamps, courses and reviews with data from the "_data" folder, run
-# Destroy all data
+##### Destroy all data
+```
 node seeder -d
+```
 
-# Import all data
+###### Import all data
+```
 node seeder -i
+```
 
 ### Documentation
-Find the extensive API documentation here: https://documenter.getpostman.com/view/4736430/T17M7RDn
+Find the extensive API documentation here: https://documenter.getpostman.com/view/4736430/T17M7RDn :book:
 
-### Author
+### Author :surfer:
 Version: 1.0.0
 License: MIT
 Author: alfheimrShiven
