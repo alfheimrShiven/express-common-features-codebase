@@ -62,4 +62,4 @@ Find the extensive API documentation here: https://documenter.getpostman.com/vie
 ### Author :surfer:
 Version: 1.0.0
 License: MIT
-Author: alfheimrShiven
+Author: @alfheimrShiven
