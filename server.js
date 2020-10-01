@@ -7,6 +7,7 @@ const fileupload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const errorHandler = require('./middleware/error');
+const redis = require('redis');
 
 // Route files
 const bootcamps = require('./routes/bootcamps');
@@ -22,8 +23,20 @@ dotenv.config({ path: './config/config.env' });
 console.log(
   `Environment variables in server.js are Env: ${process.env.NODE_ENV} & Google Oauth Secrets: ${process.env.GOOGLE_OAUTH_CLIENTSECRET}`
 );
+
 // Connect to database
 connectDB();
+
+// Redis client
+const redis_client = redis.createClient();
+redis_client.on('error', (error) => {
+  console.error(error);
+});
+redis_client.set('key1', 'value1', redis.print);
+
+redis_client.get('key1', (err, reply) => {
+  console.log(`Here is the reply from redis ${reply}`);
+});
 
 const app = express();
 
