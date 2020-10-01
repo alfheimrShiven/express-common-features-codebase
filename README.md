@@ -22,6 +22,7 @@
 18. Admin Features: CRUD ops on Users
 19. Review System
 20. Logout & Cookie clearence 
+21. Google OAuth using Passport.js
 
 ### Usage
 Rename `"config/config.env.env"` to `"config/config.env"` and update the values/settings to your own.
