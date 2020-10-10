@@ -23,6 +23,7 @@
 19. Review System
 20. Logout & Cookie clearence 
 21. Google OAuth using Passport.js
+22. Redis
 
 ### Usage
 Rename `"config/config.env.env"` to `"config/config.env"` and update the values/settings to your own.
