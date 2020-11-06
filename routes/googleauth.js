@@ -7,7 +7,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const dotenv = require('dotenv');
 
 // Load env vars
-dotenv.config({ path: './config/config.env' });
+dotenv.config({ path: './config/.env' });
 
 passport.serializeUser(function (user, done) {
   done(null, user._id);
