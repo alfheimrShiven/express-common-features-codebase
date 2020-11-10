@@ -10,7 +10,10 @@
   "author": "alfheimr.tech",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-s3": "^1.0.0-rc.4",
+    "@aws-sdk/client-s3": "^1.0.0-rc.5",
+    "@aws-sdk/s3-request-presigner": "^1.0.0-rc.5",
+    "@aws-sdk/util-create-request": "^1.0.0-rc.5",
+    "@aws-sdk/util-format-url": "^1.0.0-rc.5",
     "@types/bcryptjs": "^2.4.2",
     "@types/colors": "^1.2.1",
     "@types/cookie-parser": "^1.4.2",
