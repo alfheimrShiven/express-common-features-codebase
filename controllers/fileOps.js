@@ -1,14 +1,22 @@
 const asyncHandler = require('../middleware/async');
 // Load the SDK and UUID
-// const AWS = require('aws-sdk');
-const { S3, PutObjectCommand } = require("@aws-sdk/client-s3");
+const AWS = require('aws-sdk');
+const { S3, CreateBucketCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { S3RequestPresigner } = require("@aws-sdk/s3-request-presigner");
 const { createRequest } = require("@aws-sdk/util-create-request");
 const { formatUrl } = require("@aws-sdk/util-format-url");
 const uuid = require('uuid');
 const ErrorResponse = require('../utils/errorResponse');
+const fetch = require("node-fetch");
 
-const s3 = new S3({apiVersion: '2006-03-01'});
+const s3 = new AWS.S3({
+  region: 'ap-south-1',
+  endpoint: 's3-ap-south-1.amazonaws.com',
+  accessKeyId:  'AKIAUYHPR2AHDESEJHJU',
+  secretAccessKey: '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',
+  Bucket: 'dammnn',
+  signatureVersion: 'v4'
+});
 
 
 // @desc      Creating bucket and adding object to the bucket
@@ -21,30 +29,13 @@ var bucketName = 'alfheimrdocs-' + uuid.v4();
 var keyName = 'hello_alfheimr.txt';
 
 // Create a promise on S3 service object
-var bucketPromise = s3.createBucket({Bucket: bucketName}).promise();
-// Handle promise fulfilled/rejected states
-bucketPromise.then(
-  function(data) {
-    // Create params for putObject call
-    var objectParams = {Bucket: bucketName, Key: keyName, Body: 'Hello Alfheimr! Im the first ever doc created by you guys in AWS S3'};
-       
-    // Create object upload promise
-    var uploadPromise = s3.putObject(objectParams).promise();
-    uploadPromise.then(
-      function(data) {
-        console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-      });
-
-      res.status(200).send('Bucket created & Doc uploaded');
-}).catch(
-  function(err) {
-    console.error(err, err.stack);
-    new ErrorResponse('Error while uploading doc');
-});
+const bucketData = await s3.send(new CreateBucketCommand({ Bucket: bucketName }));
+      res.status(200).send('Bucket created '+ bucketName);
 })
 
+
 // @desc      Upload file to s3
-// @route     GET /api/v1/filesystem
+// @route     GET /api/v1/filesystem/:bucket
 // @access    Public
 exports.uploadFile = asyncHandler(async(req, res, next)=> {
   let fileName = req.params.fileName;
@@ -76,24 +67,27 @@ s3.upload (uploadParamObj, function (err, data) {
 });
 })
 
-exports.presignedURL = asyncHandler(async (req, res, next)=>{
-const BUCKET = 'alfheimrdocs-e4d65ffc-18d0-4c64-bbd2-8b4a71c651c0';
-const KEY = 'test-img-'+ uuid.v4();
-const EXPIRATION = 60 * 60 * 1000;
+// @desc  Generating Pre-signed URL (Attempt 2)
+// @route PUT /api/v1/filesystem/generatepresignedurl
+// @access  Private
+exports.generatePreSignedURL = asyncHandler(async (req, res, next)=>{
+//  const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
-// creating a s3 presigner obj
-console.log(`S3 config: ${JSON.stringify(s3.config)}`);
-const signer = new S3RequestPresigner({...s3.config});
+ const params = {
+   Bucket: 'dammnn',
+   Key: `xyz-${Math.ceil(Math.random() * 10 ** 10)}`,
+   Expires: 36000
+ }
 
-// creating file upload request
-const AWSUploadRequest = await createRequest(s3, new PutObjectCommand({ KEY, BUCKET }));
-const expirtation = new Date(Date.now() = EXPIRATION);
+ // create a command for the presigned url to run
+//  const command = new PutObjectCommand(params);
 
-// creating & formating presigned URL
-let signedUrl = formatUrl(await signer.presign(AWSUploadRequest, expirtation));
-console.log(`Generated Signed URL: ${signedUrl}`);
+ // creating a presigned url
+ const signedUrl = await s3.getSignedUrl('putObject', params);
 
-res.status(200).json({
-  signedUrl
-})
+ if(!signedUrl){
+   return new ErrorResponse(`Error while generating presigned url`, 500);
+ }
+
+console.log(`Signed URL is: ${signedUrl}`);
 })
