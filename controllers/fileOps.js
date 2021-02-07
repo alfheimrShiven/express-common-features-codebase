@@ -90,4 +90,7 @@ exports.generatePreSignedURL = asyncHandler(async (req, res, next)=>{
  }
 
 console.log(`Signed URL is: ${signedUrl}`);
+res.status(200).json({
+  'aws_presignedURL': signedUrl
+});
 })
