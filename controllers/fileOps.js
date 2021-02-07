@@ -8,8 +8,8 @@ const fetch = require("node-fetch");
 const s3 = new AWS.S3({
   region: 'ap-south-1',
   endpoint: 's3-ap-south-1.amazonaws.com',
-  accessKeyId:  'AKIAUYHPR2AHDESEJHJU',
-  secretAccessKey: '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',
+  accessKeyId:  process.env.AWS_ACCESSKEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   Bucket: 'dammnn',
   signatureVersion: 'v4'
 });
