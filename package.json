@@ -39,7 +39,7 @@
     "nodemailer": "^6.4.10",
     "passport": "^0.4.1",
     "passport-google-oauth": "^2.0.0",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "slugify": "^1.4.0",
     "uuid": "^8.3.1"
   },
