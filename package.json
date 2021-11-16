@@ -24,7 +24,7 @@
     "@types/passport": "^1.0.4",
     "@types/passport-google-oauth": "^1.0.41",
     "@types/redis": "^2.8.27",
-    "aws-sdk": "^2.784.0",
+    "aws-sdk": "^2.814.0",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.5",
